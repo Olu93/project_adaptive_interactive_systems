@@ -1,8 +1,8 @@
-\documentclass[12pt,a4paper,oneside]{article}
+\documentclass[11pt,a4paper,oneside]{article}
 
-\title{RouteToDam: Provides information on day trips to Rotterdam for students at Utrecht University}
+\title{\textbf{RouteToDam: Provide information on day trips to Rotterdam for students at Utrecht University}\newline \newline \newline}
 \date{\today}
-\author{Soring Dragan, Evangelia Giannikou, \\Mikhail Ternyuk, Olusanmi Hundogan}
+\author{Sorin Dragan, Evangelia Giannikou, \\Mikhail Ternyuk, Olusanmi Hundogan}
 \pagenumbering{gobble}
 \usepackage{eurosym}
 \usepackage{hyperref}
@@ -20,33 +20,70 @@
 \usepackage{xcolor}
 \usepackage{subfiles}
 \usepackage{ragged2e}
+\usepackage{lmodern,textcomp}
+\usepackage{graphicx}
+\usepackage{titling}
 \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 \usepackage[backend=biber, sorting=none]{biblatex}
+\usepackage[total={6.5in, 10in}]{geometry}
 \addbibresource{references.bib}
 
 \begin{document}
 
 \maketitle
 
-In order to create a recommendation system for traveling it is important to first define it, as well as the needs for adaptation and constraints. RouteToDam will be modeled as a \textbf{mobile application} providing recommendations on day trips based on the users’ profiles, needs, and goals. The reason for selecting to model a system for mobiles lies in the fact that nowadays mobile devices are primarily used for information access. E-tourism \cite{mobile_recommendation_systems} has given its place to mobile tourism since it offers new opportunities that would not be possible if the system was modeled as a website. For instance, the knowledge of the exact user location offers the possibility to give recommendations of points of interest while the user is moving from one place to another. Furthermore, the system can know the user’s mobility history and thus provide better recommendations for future locations.\\
 
-Another advantage of the mobile recommendations is that they increase the usability of mobile tourism applications as they provide personalized and more focused content. In particular, the focus group in our system refers to students from the University of Utrecht. As research has shown \cite{rita2019millennials}, the most important motivations for young people to travel are the need to experience a different lifestyle, to relax, and the desire to escape from the ordinary. Other groups are also interested in sightseeing and attending local events. Keeping that in mind, it is important to make sure that RouteToDam will adapt to all these needs and be able to fulfill every student’s expectations.\\
-
-A tourism recommender system like that should also adapt to its city. Rotterdam’s tourism gave a lot of focus on the culture \cite{rotterdam}. The result of that was the image of a modern art city with futuristic architecture. This shifted away from the traditional Dutch model leading to the enrichment of the cultural life and profile of the city. These elements are what makes this city different from the other ones in the Netherlands and our system should be able to adapt to that too. \\
-
-Why do we need user adaptation? The satisfaction level of each student of the group, as well as the number of visited locations and sights in one day, depends on how well the system adapts to users preferences. First of all, the system should provide the most related information about the city (city history, exclusive places, events and etc.), but at the same time, it suppose to be suitable for each student in a group. As a result, the application should provide a city tour plan for the whole group, but satisfy the requirements of each personality. Also, the plan should be limited to one day. Since we are considering a group of students, the system must adapt to their preferences, which are may vary. Moreover, each student could have a different experience of visiting Rotterdam. For instance: if a tourist visiting the city for the first time, she will probably want to see as many places as she can and especially the most popular of them, while a student who already been in Rotterdam, probably prefer more specific places or similar to the liked places in the past \cite{predicting}. Students may have different financial support and we suppose the system has to adapt the final result according to the budget of the group members.\\
-
-The system will adapt to the user's experience in the process of selecting locations or items she has already visited before or especially remembered during the last visit. Thus, the application can offer events, locations, and specific places with a detailed description on a similar topic. At the same time, when a student visits Rotterdam for the first time, she needs help to choose the direction to get to know the city, and the system firstly will offer the most iconic and popular places in the city to users.\\
-
-However, every person is different in their preferences, especially young students. The application should provide the user ability to indicate the personal interests of the time spending. For example clubbing, city tours, visiting special events or funds and etc. In this case, the system will take into account not only popular places, according to user requirements and initial rating, but also the opening hours of item (locations), the time of events in order to distribute visiting times optimally for users of different interests. For example, the first priority for a student is to get to the show in Rotterdam, but it starts in the evening. Before the show, the student also wants to see the main locations and sights of the city, we suppose that our system should take into account the interests of the user and adapt the tour plan to the opening timing of the event. \\
-
-When we planning a program for visiting museums or certain events, bars, and clubs, the issue of budget is very important. Nowadays, museum tickets, and unique events, even with student discounts can be quite expensive. We assume that the system may ask the students about the budget they suppose to spend on a touristic program. By identified interests and existing knowledge about the city, the application should adapt the list of city locations and sights to associated financial costs. The budget for the tour program will be equal to the minimum budget of all group members. \\
+\begin{figure}[H]
+    \includegraphics[width=\textwidth]{paper/imgs/Erasmusbrug_seen_from_Euromast.jpg}
+    \caption{An upfront view of Rotterdam and the Erasmus bridge}
+\end{figure}
 
 
-\indent As another type of adaptation we consider the described system to be able to adapt to changes in context/environment. Here, we consider multiple subsets of context adaptation. Firstly, the system will adapt to the \textbf{location}. It will suggest popular sights that are located within a formerly specified range from the current location of the group. This suggestion will take place as notifications which the users can ignore if they are not interested anymore. Secondly, the system will adapt to the \textbf{weather}. As Rotterdam is subject to unpredictable rains \cite{creemers2015meteorological}, the system will adapt to the changes in the weather by switching from outdoor activities to indoor activities. Thirdly, the system will take the \textbf{time} of the day into account. In this case, we differentiate between morning, daytime and nighttime activities. The morning might be the perfect time for a museum, while the night might imply going dancing, for example. Lastly, the system will consider the specific \textbf{date} when the trip is planned and use it to recommend unique events that might interesting for the visiting group.
+\clearpage
+% Travelling has always been one of the most popular leisure activities in developed countries.
+% The exploration of new sights has long been part of the leisure activities in developed countries. The tourism sector as a whole has constantly grown since the 80s.\cite{smeral_StructuralViewTourism_2003}\cite{doi:10.18111/wtobarometereng.2020.18.1.1} This is due to the web and the subsequent emergence of new enterprises like AirBnB or RyanAir. These trends have changed the tourism sector substantially.\cite{OECD2020} The same trend holds for the Netherlands and its cities. However, some challenges remain. \cite{europeantravelcommission_StudyGenerationTravellers_2020} 
+This paper will dive into one of the most popular leisure activities in the world -- travelling to new places.
+Especially, over the past few decades the tourism sector saw substantial changes.\cite{smeral_StructuralViewTourism_2003}\cite{doi:10.18111/wtobarometereng.2020.18.1.1} Not only have the number of tourists constantly grown but the tourists themselves changed, too.\cite{OECD2020}
+In particular, young travellers are increasingly diverse; They display varying preference traits, and tourism suppliers must adapt to the needs of digital natives to remain relevant.\cite{europeantravelcommission_StudyGenerationTravellers_2020}  To face these challenges, one must be aware of current developments in E-tourism, which currently focuses on mobile tourism as smartphones provide more flexible ways to experience the travel destination than simple websites.\cite{mobile_recommendation_systems} For instance, the knowledge of the exact user location offers the possibility to give recommendations of points of interest while the user is moving from one place to another. Furthermore, the system can know the user's mobility history and thus provide better recommendations for future locations. We can combine these capabilities with recommender systems to cater to the varying preferences and provide an optimal exploration of unknown territories. However, a key question has yet to be explored: How can we provide an optimal travel experience to groups of young people, in which each individual might display different preferences? 
 
-\indent The system will consist of two major types of adaptation. On one side, we have user adaptation and then we went for beers!!! 
+This paper will introduce RouteToDam, a mobile Group Tourist Recommender System, providing sightseeing recommendations on day trips based on the young peoples' profiles, needs, and goals. 
 
+More precisely, the system will focus on Utrecht students as the main focus group. To characterize this user group, we can draw on research which has shown multiple reasons for young people's travel endeavours.\cite{rita2019millennials} Many either feel the want to experience a different lifestyle, feel the need to relax, and have the desire to escape from the ordinary. Others are also interested in sightseeing and attending local events. Furthermore, we can assume that students are more cost-sensitive than the average tourist.\cite{europeantravelcommission_StudyGenerationTravellers_2020} The students will probably have different cultural backgrounds. However, the distinction between Dutch and international individuals should suffice in the tourism domain. This distinction is often made in tourism literature. The works of \citeauthor{maeda_ExtractionTouristDestinations_2018} or \citeauthor{stone_TouristGazeDomestic_2019} are good examples showing differing preferences between domestic and foreign tourists.\cite{maeda_ExtractionTouristDestinations_2018}\cite{stone_TouristGazeDomestic_2019} With this profile in mind, it is important to make sure that RouteToDam will adapt to all these needs and be able to fulfil every student's expectations.
+
+However, not only should a tourist recommender system adapt to the user, but also to the context or area it covers. In our case, the area will be the former European cultural capital Rotterdam.\cite{hitters_SocialPoliticalConstruction_2000} After its destruction in WW2 Rotterdam's tourism primarily focused on modern culture.\cite{rotterdam} The result of that was a modernistic architecture, which shifts away from the traditional Dutch model. This architecture sharpens Rotterdam's profile one of the most distinct from other cities in terms of architecture and urban life. In the following, we will further detail the needs of adaption in terms of users and context.
+
+How does our application adapt to users? To answer this question, we identify three main aspects of adaption: Preference, experience and financial budget. 
+
+As mentioned beforehand, a group's desire to visit a particular place depends on the \textbf{preferences} of its individuals. Meaning, the application must not only adapt to individual preferences, but it must aggregate them and provide a viable activity for the whole group. Although the system will also be adaptable to groups consisting of one user only, the real challenge arises from larger group sizes. Optimally, the system only offers activities which all participants accept, but due to differing preferences, it is more feasible to provide a set of ranked alternatives. The rank should reflect the desirability for activity according to individual preferences. 
+
+Furthermore, the system must be able to take the \textbf{varying experiences} of students into account. The system should not repeatedly propose activities that occurred in the past of users. On the other hand, it should be able to use previous Rotterdam visits as an indicator of the user's preferences. As a specific example: A tourist visiting the city for the first time will probably want to see a diverse set of places; especially the most popular of them. While someone who has already been to Rotterdam, probably prefers more specific places similar to previously visited places.\cite{predicting} A similar rationale applies to the background of the user as a Dutch student will have different experiences with Dutch tourism sights than an international student. 
+
+As the last user adaption component, the system has to consider the different economic backgrounds of each user. While planning a program for visiting museums or specific events, bars, and clubs, the issue of the budget will always remain important. Museum tickets, unique events, or tourist attractions can be quite expensive even with student discounts in mind. Hence, the system's recommendations must fall within the group's aggregate and individual's \textbf{financial budgets}. It is possible to simplify this adaption requirement by assuming that a user will reject everything that significantly exceeds their individual budget. Hence, to prevent financial miss-recommendations, the system can focus on the user whose budget is the smallest. As an example, a system should not recommend a 60€ boat tour in Rotterdam, if a group member has a budget of only 30€. Assuming that, a  group will most likely not choose an activity that excludes an individual.
+
+As another type of adaptation, we consider the described system to be able to adapt to changes in context/environment. Similar to user adaption, we can also split contextual adaptions into multiple components. For travel and tourism weather, location, time, and date play a particularly important role.
+
+Starting with \textbf{weather}, as Rotterdam is subject to unpredictable rains, the system will adapt to the changes in the weather by switching from outdoor activities to indoor activities and vice versa to suit the conditions.\cite{creemers2015meteorological} This means that instead of proposing a park visit during heavy rain, the system should prefer recommending a museum or indoor event.   
+
+Next is the adaption to the \textbf{location}. Apart from the fact that the application is inherently locally contextualized, and therefore also adapted to the location of Rotterdam, the system will take further advantage of mobile GPS-location capabilities of the smartphone. It can use these capabilities to suggest famous sights that are located within a range of the current location of the group. This suggestion will be presented as a "must-see"-notification which the group can choose to ignore. 
+
+At last, the system will take the \textbf{time} and \textbf{date} into account. That will ensure the system's discrimination between morning, daytime and nighttime activities. The morning might be the perfect time for a popular brunch location, while the night invites nightlife activities such as clubbing, bar hopping or karaoke. The date can be used to recommend unique events taking place on the date of travel. The combination of time and date has the added benefit that it can be used to prevent the system from recommending sights that are closed.  
+
+To conclude, RouteToDam will be a mobile application targeted at groups of Utrecht students who want to visit Rotterdam. For that purpose, it will adapt in various aspects to compose an optimal ranked set of alternative sights and activities for the group. On the one hand, the application will focus on adapting to the users' individual preferences, their experience with Rotterdam and their financial capabilities. On the other hand, the system will adapt to contextual information such as weather, location, time and date of the planned travel. Thus, this will assure a collective non-expensive and enjoyable visit to the city of Rotterdam. 
+
+\clearpage 
 \printbibliography
-\newpage
+
+\clearpage
+\Large
+\begin{tabularx}{\textwidth}{|X|X|X|X|}
+\hline
+\multicolumn{3}{|c|}{Group 12 Assessment}    \\ \hline
+Name                & Contribution & Signature \\ \hline
+\hline
+Evangelia Giannikou & 100\%        &           \\ \hline
+Sorin Dragan        & 100\%        &           \\ \hline
+Mikhail Ternyuk     & 100\%        &           \\ \hline
+Olusanmi Hundogan   & 100\%        &           \\ \hline
+\end{tabularx}
+
 \end{document}
