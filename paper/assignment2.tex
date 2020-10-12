@@ -8,6 +8,7 @@
 
 \usepackage{eurosym}
 \usepackage{hyperref}
+\usepackage{subfig}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{tabularx,booktabs}
@@ -47,19 +48,25 @@ Route2Dam is an application to recommend various activities to groups on a singl
 \subsection{User Modeling}
 \label{lbl:UM}
 Knowing that the application not only operates in the domain of city tours, but that the main users are students from the Utrecht university, helps creating a distinct user model for the application. In the following, we will explain who the user is, how the application adapts to the users characteristics and how the application models the users' preference. 
-\subsubsection{Who is the user?}
-The final goal for our application is to provide the optimal guidance of city visiting for the group of students in one day. Meanwhile, the system interacts only with one individual at the time, gathering personalised information. Only with information received from every person individually, the system will be able to generate guideline for the whole group. In our case individual user is a student of Utrecht University. Hence, it could be persons mostly the same age under 30, but they could have a different backgrounds and cultures, also their interests could significantly vary. But still we assume that it’s a young person with a lack of experience of travelling in general. Each person of the group supposed to register into the application and provide the basic information about themselves. The user’s account will store the user model, which contains a current trip, user preferences (including best picks) and personal settings. The preferences has ranked base system. As high preference been ranked as strong it impacts the final decision. 	
-\subsubsection{How do we adapt to the user?}
-The system supposed to retrieve the users preferences in order to suggest relevant guideline. Before the trip, the user is asked about basic settings and preferences to avoid the cold-start problem. The adaptation process includes 2 major steps: \\	1) \textbf{Set User Constraints:}\\	
-The constraints give to model general information about the user. That step is required in purpose to prepare relevant items for the pairwise comparison process at the step 2. All that information will be saved at the system, but user always can change the data provided. The constraints are following:\newline 
-	- \textit{Experience}. Firstly, the user will be asked either they are first time in the city or they are local students which probably have some knowledge about Rotterdam or been there before. For the local students system will suggest more specific locations and events to choose. Also system will show places that user didn’t seen at past visits. \\
-    - \textit{Trip Duration}. The user needs to specify the expected start time and the end time of the trip. The information provided will be used by the system to schedule the visiting time of places that have opening hours time limits.\\
-    - \textit{Budget}. The user will be asked to specify his travel budget. Nowadays, museum tickets, events or another tourist attractions can be quite expensive even with student discounts in mind. Therefore, budget constraints must be taken into account in visits planning.\\
-  2) \textbf{Retrieve User Preferences:}\\
-  The second step is the technical process of the adaptation where system tries to retrieve the preferences from user without asking directly.\newline  
-- \textit{Pairwise Comparison}. After setting the restrictions for the user, the system will start the process of user's preferences recognition. The user will be asked to choose which of the two places presented by the system he wants to visit more. With each selection, the user will be provided with a photo of the location and a short description. The minimum number of comparison rounds is 3. If the user is not satisfied with the selected locations, he can continue the selection process. As more comparisons a user uses, as more accurate the system will be able to adapt the guideline for the entire group. Actually, the weights of all members of the group are equal, but detailisation level of preferences will be higher for the user who made more choices. Hence, the probability that the system could better adapt the plan for this user will be higher.
+
+\subsubsection{Characterizing the individual and the group}
+As mentioned earlier the goal of our application is to provide optimal guidance to groups of students visiting Rotterdam for a day trip. However, we have to rely on information of individual users to come up with a recommendation that fits the group. Hence, it is necessary to characterize the expected users of the system. In our case, the targeted user is a student of Utrecht University. Hence, we can expect a young students between 20-29 years old according to a study by \citeauthor{AgeAverage_students}. Although most students of Utrecht university being Dutch we can still assume that their different backgrounds and cultures vary significantly. This is backed up by the last Annual Report of Utrecht University (THE ANNUAL REPORT 2019) which states that 10\% of all students are non-dutch. Even among Dutch students, we can expect an increasingly diverse population of students, as early trends of the dutch \emph{Centraal Bureau voor de Statistiek} suggest.\cite{theovanmiltenburg_AllochtonenHogerOnderwijs_2007}. Students are also expected to have a relatively low average income. Although, the average income varies strongly over household types (living with parents, a student house, own house/apartment), the average of €587 remains low.\cite{kobus_OwnershipOncampusUse_2013} Hence, we can assume a high sensitivity for extracurricular expenditures. All these characteristics need to be considered, if we want to understand a users preferences. However, some dynamics only occur in groups, which is why we also have to characterize the group. We consider every set of users higher than one a group. Additionally, we assume that the users of the applications are acquainted with each other. This assumption simplifies the scope of the application in two ways. First, we do not have to introduce a person to person recommendation module. Second, we can expect communicative interactions outside of the application. However, this also introduces problems in group decision making like social confrontations and pressure. This solidifies the need for privacy and voting mechanisms within the application, if the group cannot reach a consensus.
+The application will retrieve basic personal information about each user of the group via the registration process. The user’s account will store the user model, which contains a user's preferences and personal settings. The initial information  is used to create an personal set of recommendations, which can be used for solo city-trips or as part of the group's trip recommendation.
+  	
 \subsubsection{How do we model the users preferences?}
-Our application assumes to design an optimal list of activities for a group of students as a whole, therefore it is very important for the system to collect information about the preferences of all participants before starting the trip. Using the obtained information at the described preliminary stage, the system will design a personal rating of activities for each user. The pairwise comparison method motivates person to use the app longer and keep choosing, thereby allowing the system to better understand they preferences and better adapt to a specific user. Thus, the user increases his chances of visiting more places of interest to him and spending a productive day in Rotterdam. But the application adaptation process is limited not only by the Pairwise Comparison process and settings, the system also tracks the user's movement along the designed visiting plan. The user will not strictly follow the route all the time, and if the system determines that there are interesting sights within a 10-minute walk from the current user's location and this sight might not have been included in the plan initially, the system will offer to visit it, because this will not radically change the route plan, but at the same time, the user will receive more information and impressions of the city.
+As mentioned earlier, the application retrieves information about the user in order to suggest a relevant guide through Rotterdam. Two major components inform our user model -- User constraints and Preference. First, a set of constraints provided by the user,
+
+
+The users preferences modeling includes 2 major steps: \\	1) \textbf{Set User Constraints:}\\	
+The constraints give to model general information about the user. That step is required in purpose to prepare relevant items for the pairwise comparison process at the step 2. All that information will be saved at the system, but user always can change the data provided. The constraints are following:\newline 
+	- \textit{Experience}. Firstly, the users will be asked either they are first time in the city or they are local students which probably have some knowledge about Rotterdam or been there before. For the local students system will suggest more specific locations and events to choose. Also system will show places that user didn’t seen at past visits. \\
+    - \textit{Budget}. The user will be asked to specify his travel budget. Nowadays, museum tickets, events or another tourist attractions can be quite expensive even with student discounts in mind. Therefore, budget constraints must be taken into account in planning.\\
+  2) \textbf{Retrieving User Preferences:}\\
+  The second step is the technical process of the modeling where system tries to retrieve the preferences from user without asking direct questions.\newline  
+- \textit{Pairwise Comparison}. After the restrictions setting are complete for the user, the system will start the process of users preferences retrieving. The user will be asked to choose which of the two places presented by the system he wants to visit more. With each selection, the user will be provided a photo of the location and a short description of item. The minimum number of comparison rounds is 3. If the user is not satisfied with the presented locations, he can continue the selection process. As more comparisons a user uses, as more accurate the system will be able to adapt the guideline for the entire group. Actually, the weights of all members of the group are equal, but detailisation level of preferences will be higher for the user who made more choices. Hence, the probability that the system could better adapt the plan for this user will be higher.\newline
+- \textit{Onsite modeling}. The group of student could not follow the complete guideline, but to choose only starting point of the possible trip. In that scenario the system calculates the time user spends in the recent location in order to suggest possible path continuation options.    
+\subsubsection{How do we adapt to the user?}
+Our application assumes to design an optimal list of activities for a group of students as a whole, therefore it is very important for the system to collect information about the preferences of all participants before starting the trip. Using the obtained information at the described preliminary stage, the system will design a personal rating of activities for each user. Using the previous users experience, system will choose the different items for the pairwise comparison. The user increases his chances of visiting more places of interest to him and spend an exiting day in Rotterdam. As long as system can work in 2 different ways: as a pre-planned trip or using only starting point, the application adaptation process is limited not only by the Pairwise Comparison process and settings, the system also tracks the user's movement along the designed visiting plan. When group of students choosing "starting point" regime of the trip, system gathering information along the way, like time spending at the location and suggest relevant locations as a next place to visit. Also, the user will not strictly follow the guideline all the time, and if the system determines that there are interesting sights within a 10-minute walk [.\cite{ton_CyclingWalkingDeterminants_2019}] from the current user's location and this sight might not have been included in the plan initially, the system will offer to visit it, because this will not radically change the route plan, but at the same time, the user will receive more information and impressions of the city.
 \subsection{Context Model}
 \label{context}
 Being a recommender for city-tour activities, the application has to place a particular importance to contextual aspects of the trip. Namely, the location, the time and the weather in which the application is used. In the next paragraphs, we are going to describe how the application retrieves each contextual information and how it is used within the system to provide a contextually adaptive experience to the user.
@@ -190,31 +197,45 @@ Equations \ref{posterior} and \ref{predictive} show the resulted posterior and p
      \Sigma = K^u \otimes K^a
 \end{equation}
 where $\otimes$ is the Kronecker product between the covariance between all the user vectors $K^u$ and the covariance between all the activities vectors $K^a$; $W$ is the ratio between the function and the first derivative of the function present in Newton's method iterative approach.
+\begin{subequations}
+\label{eqn:preddist}
 \begin{equation}
     \label{predictive}
     p(f^*|O) = N(f^*|\mu^*, C^*)
 \end{equation}
-with $\mu^* = (k^*)^T\Sigma^{-1}f_{max}$ and $C^* = \Sigma^* - (k^*)^T(\Sigma - W^{-1})^{-1}k^*$.
 \begin{equation}
-     k^* = (k^*)^u \otimes (k^*)^a
+    \mu^* = (k^*)^T\Sigma^{-1}f_{max}
 \end{equation}
 \begin{equation}
-     (k^*)^u = [k^u(u^*, u_1),\hspace{5} ...\hspace{5} k^u(u^*, u_{|U|})]
+    C^* = \Sigma^* - (k^*)^T(\Sigma - W^{-1})^{-1}k^*    
 \end{equation}
-\begin{equation}
-     (k^*)^a = \begin{bmatrix}
-   k^a(a^*_1, a_1),  \hspace{5}...\hspace{5}  k^a(a^*_1, a_{|A|}) \\
-   k^a(a^*_2, a_1),  \hspace{5}...\hspace{5}  k^a(a^*_2, a_{|A|})
-   \end{bmatrix}
-\end{equation}
-\begin{equation}
-     \Sigma^* = \begin{bmatrix}
-   k^u(u^*,u^*)k^x(a^*_1, a^*_1) &
-   k^u(u^*,u^*)k^x(a^*_1, a^*_2) \\
-   k^u(u^*,u^*)k^x(a^*_2, a^*_1) &
-   k^u(u^*,u^*)k^x(a^*_2, a^*_2) 
-   \end{bmatrix}
-\end{equation}
+\end{subequations}
+
+\autoref{eqn:preddist} shows that we only have to compute $\mu^*$ to get an estimate for the unknown values in $f^*$. The computed covariance $C^*$ is not necessarily required for the application but it provides us with the level of uncertainty for the estimation.
+ 
+\begin{subequations}
+    \label{eqn:computation}
+    \begin{equation}
+         k^* = (k^*)^u \otimes (k^*)^a
+    \end{equation}
+    \begin{equation}
+         (k^*)^u = [k^u(u^*, u_1),\hspace{5} ...\hspace{5} k^u(u^*, u_{|U|})]
+    \end{equation}
+    \begin{equation}
+         (k^*)^a = \begin{bmatrix}
+       k^a(a^*_1, a_1),  \hspace{5}...\hspace{5}  k^a(a^*_1, a_{|A|}) \\
+       k^a(a^*_2, a_1),  \hspace{5}...\hspace{5}  k^a(a^*_2, a_{|A|})
+       \end{bmatrix}
+    \end{equation}
+    \begin{equation}
+         \Sigma^* = \begin{bmatrix}
+       k^u(u^*,u^*)k^x(a^*_1, a^*_1) &
+       k^u(u^*,u^*)k^x(a^*_1, a^*_2) \\
+       k^u(u^*,u^*)k^x(a^*_2, a^*_1) &
+       k^u(u^*,u^*)k^x(a^*_2, a^*_2) 
+       \end{bmatrix}
+    \end{equation}
+\end{subequations}
 We can use the described process to find the most k preferred activities for every user. Hence, we also provide individual recommendations, even if the macro system is defined for group recommendations. 
 
 As a last mention, naturally, we would try to a achieve sufficiently good ranking with as few queries as possible. The first queries will contain very dissimilar activities, as they carry much more information, but gradually, if the user keeps choosing, more similar activities will also appear in the queries. Hence, with more information, the resulting ordering of the activities will be closer and closer to the optimal one, assuming at least one optimal ordering exists for a specific user. The procedure of choosing the queries was elegantly described in section \ref{sec:pair}.
@@ -298,9 +319,137 @@ The second scenario translates in a visiting plan tailored for the day trip. If 
 Several things must be mentioned here. Firstly, $w$ stands for the weight, $d$ is the geographical distance, $t$ is the time frame, whilst $m$ represents the amount of money. Secondly, all the values that enter the formula have been min-max normalized in advanced, thus we deal only with values in the $[0, 1]$ interval. Lastly, as we model this as a shortest path problem, the lower the weight, the better. At this point we have constructed the graph. Evidently, calculating a path through all the activity nodes, without visiting two nodes twice happens to be the well-studied \textbf{Travelling Salesman Problem}(TSP) from computer science. We deal with an NP-hard problem that where a solution can be achieved, without stochastic using stochastic methods, with the worst-case time complexity of $O(2^nn^2)$ and space complexity of $O(2^nn)$. However, we must remember that we area dealing with a graph with $k+1$ nodes, where k is a very small number (a one digit number). This implies that we can solve the problem using the Held-Karp algorithm, thus providing a well-adjusted visiting plan for the group.
 
 \section{User Experience}
+Route2Dam is a modern designed mobile application aiming to attract users of a young age. The design of it is simplistic, with elements that adapt to the environment of the application. As previously mentioned, the name is a wordplay for Rotterdam, easy to remember, and accurate, as it gives out what the concept of the application is. In addition, inspired by the fact that water is an integral element of the city, Rotterdam is the largest port in Europe, the primary color of the user interface is blue. Finally, the splash screen shown in figure \ref{fig:splash_screen} is an example of a design adaptation that illustrates a figure of the Erasmus bridge, one of the most important landmarks of the city. To combine it with the overall Dutch identity, the colors of the name were based on the Dutch flag. 
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/splash_screen.png}
+    \caption{The splash screen of Route2Dam}
+    \label{fig:splash_screen}
+\end{figure}
+
+The application has two types of users; the administrator and the simple users. Both types need to set up their personal and trip settings and can pick the activities they would like to do. 
+
+The administrator is considered the person to first create a new trip on the application, and he is distinguished by a small “crown” icon. His additional feature is that he can invite his friends (simple users) to join the application but also set a starting point for the trip. The simple user's feature is accepting or rejecting the administrator’s proposals.
+
+Initially, the administrator is starting a new trip and sets up his profile and trip preferences. As shown in figure \ref{fig:profile_trip_settings}, these involve his name, if he is Dutch or no, and if he has been before to Rotterdam. Also, he needs to set an approximate amount of money he is willing to spend so that the application does not show results that are over the group’s budget. In the trip settings, the timeframe of the day trip is set to show only activities and places that are open during the visit.
+
+\begin{figure}[H]
+    \centering
+    \subfloat[\centering]{{\includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/profile.png} }}%
+    \qquad
+    \subfloat[\centering]{{\includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/trip_settings.png} }}%
+    \caption{The profile and trip settings screens }%
+    \label{fig:profile_trip_settings}%
+\end{figure}
+
+Afterward, the administrator can send an invitation to other users by clicking on the "add" button at the bottom of the left navigation drawer as shown in figure \ref{fig:left_menu}. The button triggers an invitation link sent through other messenger applications (WhatsApp, Messenger etc).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/left_menu.png}
+    \caption{The left navigation drawer}
+    \label{fig:left_menu}
+\end{figure}
+
+Apart from the invitation button, this screen is also available for simple users, so both user types share the same user interface. Once the user has set up his personal preferences, the data are stored in the application and are accessible from the left navigation drawer. For example, his personalized suggested activities are available under the “My best picks” item. The reason is that next time he uses it for another trip, he will not have to reset his preferences and will “save” some time. Another feature of this screen is that everyone can see who has already joined the account or even upload a profile picture.
+
+Assuming that both the administrator and the other users have “joined” the trip account and set up their initial settings, they are all prompted to the pairwise comparison screen as in figure \ref{fig:pairwise_comparison_screens}.
+
+There, the user gets two different options, and by clicking on one of the images, he moves on to the next pair for a minimum of 3 times. At last, the system urges the user to either continue the customization and move to another round of pair comparisons or show him some suggested activities.
+
+\begin{figure}[H]
+    \centering
+    \subfloat[\centering]{{\includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/pairwise1.png} }}%
+    \qquad
+    \subfloat[\centering]{{\includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/pairwise2.png} }}%
+    \caption{The pairwise comparison screens }%
+    \label{fig:pairwise_comparison_screens}%
+\end{figure}
+
+At this point, he can also get additional information about the place, before he selects it. This information is some description of the place, opening times, and contact details as shown in figure \ref{fig:info_screens}.
+
+\begin{figure}[H]
+    \centering
+    \subfloat[\centering short description]{{\includegraphics[width=0.25\textwidth]{paper/imgs/hifi_prototypes/info1.png} }}%
+    \qquad
+    \subfloat[\centering opening hours]{{\includegraphics[width=0.25\textwidth]{paper/imgs/hifi_prototypes/info2.png} }}%
+    \qquad
+    \subfloat[\centering contact details]{{\includegraphics[width=0.25\textwidth]{paper/imgs/hifi_prototypes/info3.png} }}%
+    \caption{The pairwise comparison screens }%
+    \label{fig:info_screens}%
+\end{figure}
+
+Once the user finishes with the customization, he is shown the results screen with suggested activities as in figure \ref{fig:results_screen}. At this stage, as an administrator, he can select to do all the activities on the list by tapping on “suggest visiting plan” or start from one specific location. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/results.png}
+    \caption{The suggested activities screen}
+    \label{fig:results_screen}
+\end{figure}
+
+The other users then receive a push notification with the starting point, and they can accept it or reject it (figure \ref{fig:notification_yes_no}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/push_notification_yes-no.png}
+    \caption{The push notification of a suggested activity}
+    \label{fig:notification_yes_no}
+\end{figure}
+
+Once the starting point is agreed, the option is greyed out (figure \ref{fig:grey_result}). Users can get additional information from the ‘i’ icon or click to the directions icon that will open an external application to navigate them there such as Google maps.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/results_grey.png}
+    \caption{The selected activity is greyed out}
+    \label{fig:grey_result}
+\end{figure}
+
+Lastly, as it can be seen in figure \ref{fig:must_see} the application can send push notifications throughout the whole time, notifying the users about must-see attractions.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/push_notification_must_see.png}
+    \caption{The 'must-see' push notification}
+    \label{fig:must_see}
+\end{figure}
+
 \section{Implementation}
+Most of the descriptions so far have been mostly conceptually or visually informed. However, in order to get a hollistic understanding of our application, we need to provide more intel behind certain processes and formulas.
+
 \subsection{System Design}
-\subsection{Content and User representation }
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{paper/imgs/flowchart/1.png}
+    \caption{First part}
+    \label{fig:flowchart1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{paper/imgs/flowchart/2.png}
+    \caption{Second part}
+    \label{fig:flowchart2}
+\end{figure}
+
+\subsection{Content and User representation}
+A very important part of every model-based system is the representation of real-world objects within the system. For our purpose, we need to clarify the representation of users and activities in our system. As mentioned prior, both objects are represented as vectors. In the case of users $U = {u_1, u_2, \ldots, u_n} $ with being a vector $u \in \mathbb{R}^d$. $d$ refers to the dimensionality corresponding with the user's characteristics. Namely, cultural background, visiting history, budget and activity type preference. Cultural background is a categorical and will be represented as dichotomous variable being either 0 for International or 1 for Dutch. Similar holds for visiting history as we only track whether the user has visited Rotterdam at least once (as 1) or never (as 0). Budget is a ratio variable starting from 0 to $+\inf$, but it will be normalized across all users of the system. The activity type preference is a nominal variable ranging over the taxonomy of attraction groups and restaurant subcategories established by tripadvisor (http://developer-tripadvisor.com/content-api/business-content/categories-subcategories-and-types/). This results in 23 categories that can characterize the attraction preference of a user for a certain type of attraction. Each category leads to a corresponding dimension which can range over \mathbb{N}. Each dimension will track the count for which a user preferred a certain activity type by choosing an item in the pairwise-comparison process. 
+To get a better understandin, it is important to understand that we use the same 23 categories to represent an item for the recommender model established in section XXX. The only difference here is that each dimension is a dichotomous variable and every item can belong to $m$ categories. The following XXX illustrates the representation of both a user and an item.
+
+\subsection{Pairwise-comparison model computation}
+Given the set of users $U$, items $A$ and a dataset of pairwise comparisons $O$, we can now compute the preference models. For that purpose we have to specify a covariance function $k$, which captures the distance between items and users. Any Mercer-kernel function can be used, but as \citeauthor{guo_GaussianProcessPreference_2010} showed, the standard RBF-kernel suffices. The equation follows 
+
+\begin{equation}
+k(x, x') = \exp\left(-\frac{|| x - x' ||^2}{2\sigma^2}\right)
+\end{equation}
+
+where $\sigma$ is a hyperparameter that needs to be tuned with hyperparameter optimization techniques. $x$ and $x'$ are vectors which correspond to two user vectors $u$ or two activity vectors $a$. Knowing this, we can compute the quantities $K^*$ and $\Sigma^*$ of \autoref{eqn:computation} to find $\mu^*$ with \autoref{eqn:preddist}.
+
+\subsection{Graph representation}
 
 \clearpage 
 \printbibliography
