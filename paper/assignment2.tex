@@ -25,6 +25,7 @@
 \usepackage{ragged2e}
 \usepackage{lmodern,textcomp}
 \usepackage{graphicx}
+\usepackage{subcaption}
 \usepackage{titling}
 \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 \usepackage[backend=biber, sorting=none]{biblatex}
@@ -39,14 +40,14 @@
 % \end{figure}
 
 \begin{abstract}
-    In this paper we present Route2Dam, a group travel recommender system for Utrecht University students that want to visit the city Rotterdam. The system uses gaussian processes and pairwise comparisons as a model-based approach to elicit preferences. 
-    The preferences are used to construct individual user and aggregated group recommendations. Furthermore, the system will adapt its recommendation on-site based on the current contextual aspects like time, location and weather. The paper will provide insights into design decisions, the recommendation system, implementation details and the intended user experience. 
+    In this paper, we present Route2Dam, a group travel recommender system for Utrecht University students that want to visit the city of Rotterdam. The system uses Gaussian processes and pairwise comparisons as a model-based approach to elicit preferences. 
+    The preferences are used to construct individual and aggregated group recommendations. Furthermore, the system will adapt its recommendation on-site based on the current contextual aspects like time, location, and weather. The paper will provide insights into design decisions, the recommendation system, implementation details, and the intended user experience. 
 \end{abstract}
 
 \section{Introduction}
 This paper will dive into one of the most popular leisure activities in the world -- travelling to new places.
 Especially, over the past few decades the tourism sector saw substantial changes.\cite{smeral_StructuralViewTourism_2003}\cite{doi:10.18111/wtobarometereng.2020.18.1.1} Not only have the number of tourists constantly grown but the tourists themselves changed, too.\cite{OECD2020}
-In particular, young travellers are increasingly diverse; They display varying preference traits, and tourism suppliers must adapt to the needs of digital natives to remain relevant.\cite{europeantravelcommission_StudyGenerationTravellers_2020}  To face these challenges, one must be aware of current developments in E-tourism, which currently focuses on mobile tourism as smartphones provide more flexible ways to experience the travel destination than simple websites.\cite{mobile_recommendation_systems} This paper will introduce Route2Dam, a mobile group tourist recommender system, providing sightseeing recommendations on day trips based on the young peoples' profiles, needs, and goals. 
+In particular, young travellers are increasingly diverse; They display varying preference traits, and tourism suppliers must adapt to the needs of digital natives to remain relevant.\cite{europeantravelcommission_StudyGenerationTravellers_2020}  To face these challenges, one must be aware of current developments in E-tourism, which currently focuses on mobile tourism as smartphones provide more flexible ways to experience the travel destination than simple websites.\cite{mobile_recommendation_systems} This paper will introduce Route2Dam, a mobile group tourist recommender system, providing sightseeing recommendations on day trips based on the young people's profiles, needs, and goals. 
 
 \section{Design}
 \label{sec:design}
@@ -56,7 +57,7 @@ Route2Dam is an application which recommends various activities to groups on a s
 Knowing that the application not only operates in the domain of city tours, but that the main users are students from the Utrecht University, helps formulating a representative user model for the application. In the following, we will explain who the user is, how the application models the users' preference and how the application adapts to the users' characteristics. 
 
 \subsubsection{Characterizing the individual and the group}
-As mentioned earlier, the goal of our application is to provide optimal guidance to groups of students visiting Rotterdam for a day trip. However, we have to rely on information about individual users to come up with a recommendation that fits the group. Hence, it is necessary to characterize the expected users of the system. In our case, the targeted user is a student at Utrecht University. According to a study by \citeauthor{AgeAverage_students}, we can expect young students between 20-29 years old.\cite{AgeAverage_students} Most of them are digital natives and therefore, adept at using mobile applications.\cite{prensky_DigitalNativesDigital_2001a} Furthermore, we can assume the main goal for conducting a city-trip, includes the desire to experience a different lifestyle, the need to relax, or escaping the ordinary. Others are also interested in sightseeing and attending local events.\cite{rita2019millennials} For those who are primarily interested in the city, seeing most of Rotterdam's sites during the limited time is particularly important. Although most students of Utrecht University are Dutch, we can still assume that their different backgrounds and cultures vary significantly. This is supported by the \emph{Annual Report of Utrecht University 2019}, which states that 10\% of all students are international.\cite{utrecht_UniversiteitUtrecht_2019} Furthermore, even among Dutch students, we can expect an increasingly diverse population of students, as early trends of the dutch \emph{Centraal Bureau voor de Statistiek} suggest.\cite{theovanmiltenburg_AllochtonenHogerOnderwijs_2007} Hence, the application faces a multitude of preference profiles. Students are also expected to have a relatively low budget. Although, the average income varies strongly over household types (living with parents, a student house, own house/apartment), the average of €587 remains low.\cite{kobus_OwnershipOncampusUse_2013} Hence, we can assume a high sensitivity for extracurricular expenditures. Lastly, we can expect each user to lean towards certain activity types. Activity types are categories of activities that share core characteristics, such as \emph{Museums}, \emph{Bars}, etc.. 
+As mentioned earlier, the goal of our application is to provide optimal guidance to groups of students visiting Rotterdam for a day trip. However, we have to rely on information about individual users to come up with a recommendation that fits the group. Hence, it is necessary to characterize the expected users of the system. In our case, the targeted user is a student at Utrecht University. According to a study by \citeauthor{AgeAverage_students}, we can expect young students between 20-29 years old.\cite{AgeAverage_students} Most of them are digital natives and therefore, adept at using mobile applications.\cite{prensky_DigitalNativesDigital_2001a} Furthermore, we can assume the main goal for conducting a city-trip, includes the desire to experience a different lifestyle, the need to relax, or escaping the ordinary. Others are also interested in sightseeing and attending local events.\cite{rita2019millennials} For those who are primarily interested in the city, seeing most of Rotterdam's sites during the limited time is particularly important. Although most students of Utrecht University are Dutch, we can still assume that their different backgrounds and cultures vary significantly. This is supported by the \emph{Annual Report of Utrecht University 2019}, which states that 10\% of all students are international.\cite{utrecht_UniversiteitUtrecht_2019} Furthermore, even among Dutch students, we can expect an increasingly diverse population of students, as early trends of the dutch \emph{Centraal Bureau voor de Statistiek} suggest.\cite{theovanmiltenburg_AllochtonenHogerOnderwijs_2007} Hence, the application faces a multitude of preference profiles. Students are also expected to have a relatively low budget. Although, the average income varies strongly over household types (living with parents, a student house, own house/apartment), the average of €587 remains low.\cite{kobus_OwnershipOncampusUse_2013} Hence, we can assume a high sensitivity for extracurricular expenditures. Lastly, we can expect each user to lean towards certain activity types. These are categories of activities that share core characteristics, such as \emph{Museums}, \emph{Bars}, etc.. 
 
 All these characteristics need to be considered if we want to understand a user's preference profile. However, some dynamics only occur within groups, which is why we also have to characterize how we define the notion of a group. We consider every set of users with a cardinality higher than one group. Additionally, we assume that the users of the application are acquainted with each other. This assumption simplifies the scope of the application in two ways. First, we do not have to introduce a person to person recommendation module. Second, we can expect communication outside of the application. However, this also introduces problems in group decision making like direct confrontations and peer pressure.\cite{asch_OpinionsSocialPressure_1955}\cite{gitelson_InfluenceFriendsRelatives_1995} This solidifies the need to find a consensus first or if that is not possible for anonymous voting mechanisms within the application.
 For practical reasons, the application will also distinguish between the group's administrator and a regular user. The group administrator initiates the trip within the system by setting up the trip and inviting other group members. However, this distinction only stems from technical and procedural considerations, described later in the paper. Apart from these practical considerations, the group administrator is a regular user as established above. 
@@ -67,7 +68,7 @@ As mentioned earlier, the application retrieves information about the user in or
 
 The characteristics will act as input for the second component and are configurable by the user. We will use them to compose the user representation and compute user similarities. As a result, they will not influence the recommendations directly (with an exception for budget and history). The user characteristics consist of: 
 \begin{itemize}
-\item \textbf{Budget:} The student's income highly influences the set of activities the user can partake in. Therefore, the user will be asked to specify his travel budget which will subsequently filter the available recommendations. Budget is an exception among all other characteristics, as it will also act as preliminary filters. As a result, it will influence the recommendation directly. More on that in \autoref{sec:rs}.
+\item \textbf{Budget:} The student's income highly influences the set of activities the user can partake in. Therefore, the user will be asked to specify his travel budget which will subsequently filter the available recommendations. Budget is an exception among all other characteristics, as it will also act as a preliminary filter. As a result, it will influence the recommendation directly. More on that in \autoref{sec:rs}.
 
 \item \textbf{Rotterdam first-timer:} The user can specify whether he has visited Rotterdam before or not. This will influence the recommendations the system provides. Users that have never visited Rotterdam will likely have different recommendation needs compared to users that are already acquainted with the city.
 
@@ -88,7 +89,7 @@ At this point, it is important to explain how the application collects informati
 \label{sec:context}
 Now that the previous section explained briefly how the model adapts to the user, it will be necessary to explain the context adaptation. Most of the adaptions described in this section will influence recommendations on-site, which contrasts user adaptions, which affect recommendations beforehand and remain static throughout the trip.
 
-Being a recommender system for city-tour activities, the application has to place a particular importance to contextual aspects of the trip. Namely, the location, the time and the weather in which the application is used. In the next paragraphs, we are going to describe how the application retrieves information about the current situation and how it is used within the system to provide a contextually adaptive experience to the user.
+Being a recommender system for city-tour activities, the application has to place a particular importance to contextual aspects of the trip. Namely, the location, the time and the weather in which the application is used. In the next paragraphs, we are going to describe how the application manages to adapt to the context. \autoref{fig:adaptions} show cases the adaptions that take place.
 
 \subsubsection{Weather}
 The weather situation has always been an important tourism factor that requires special attention due to its unpredictable behaviour. Several studies show a specific need for adaptation, as it is a key driver for user satisfaction or dissatisfaction.\cite{becken_ImportanceClimateWeather_2010} Among others, \citeauthor{defreitas_TourismClimatologyEvaluating_2003} identifies two on-site behaviours that the application needs to take into account. Not only do tourists want to avoid unfavorable weather conditions (eg. move from sun to shade), but they change their activity accordingly to suit them (eg. swim more/less). 
@@ -125,6 +126,21 @@ The latter, however, highly depends on the nature of the activity. For instance,
     \forall i \in A: T_i - (T_{now} + \frac{\lvert Location_i - Location_G \rvert}{4.5}) < \overline{T_i} \Rightarrow Utility_{i}^* = 0
 \end{equation}
 $T_i$ refers to the closing time of activity $i$ in the set of all activities $O$. $T_{now}$ refers to the current time. Like with location, this update only occurs after visiting the first activity. 
+
+% TODO: Fix this
+\begin{figure}[H]
+    \centering
+    \subfloat[\centering]{{\includegraphics[width=0.20\textwidth]{paper/imgs/hifi_prototypes/beach.png} }}%
+    \subfloat[\centering]{{\includegraphics[width=0.20\textwidth]{paper/imgs/hifi_prototypes/cinema.png} }}%
+    \qquad
+    \subfloat[\centering]{{\includegraphics[width=0.20\textwidth]{paper/imgs/hifi_prototypes/brunch.png} }}%
+    \subfloat[\centering]{{\includegraphics[width=0.20\textwidth]{paper/imgs/hifi_prototypes/bars.png} }}%
+    \qquad
+    \subfloat[\centering]{{\includegraphics[width=0.55\textwidth]{paper/imgs/hifi_prototypes/location_adaptation_combined.png} }}%
+    \caption{Show case of different context adaptations: First, outdoor and indoor adaptations because of weather changes (a \& b). Second, day-time and night-time activities based on the current time (c \& d). Third, closely located activities are higher ranked (e). 
+    }%
+    \label{fig:adaptions}%
+\end{figure}
 
 \subsubsection{Rotterdam}
 The last context, which is often overlooked, is the adaptation to Rotterdam, the former European cultural capital.\cite{hitters_SocialPoliticalConstruction_2000} After its destruction in WW2, Rotterdam's tourism primarily focused on modern culture.\cite{rotterdam} The result of that was a modernistic architecture, which shifts away from the traditional Dutch model. The application's adaption to Rotterdam is an inherent part of design goals with regard to visuals and content. For instance, the application's name \emph{Route2Dam} is a wordplay, as it bears acoustic resemblance to \emph{Rotterdam}. In terms of content, the application assumes that the students will not change the location during the day trip which is why the application only shows locations and events confined to Rotterdam. Other locations are excluded. The user interface (UI) of the application was created with Rotterdam's modernistic architectural design in mind. An example of this can be seen in the splash screen, which shows the \emph{Erasmus Bridge's} silhouette. However, more details about visual design decisions are going to be elaborated in the UI section of this paper.
@@ -401,29 +417,23 @@ As soon as users accept an invitation they move to the \emph{Pairwise comparison
 
 \section{User Experience}
 \label{sec:UX}
-Route2Dam is a mobile application designed to not only attract users of a young age but visually stay in line with the modernistic appeal of Rotterdam. The design is simplistic, with elements that adapted to the context of the application. The following sections will demonstrate these design decisions from a visual and narrative perspective.
+Route2Dam is a mobile application designed to not only attract users of a young age but visually stay in line with the modernistic appeal of Rotterdam. The overall design follows the Material Design language by Google.\cite{googleinc._MaterialDesign_2014} The guidelines were proposed for mobile applications and designed to work well with small touch interfaces. Core characteristics of the material design are card elements and depth effects such shadows. This design was chosen as it captures the modernism of Rotterdam and simultaneously fits to screen sizes of mobile applications. The following sections will demonstrate these design decisions from a visual and narrative perspective.
 
 \subsection{User interface}
-As previously mentioned, the name is a wordplay for Rotterdam, easy to remember, and accurate, as it describes the goal of the application. In addition, inspired by the fact that water is an integral element of the city, as Rotterdam is the largest port in Europe, the primary color of the user interface is blue. The splash screen shown in \autoref{fig:splash_screen} is a prime example of the application's design-wise adaptation as it illustrates the Erasmus bridge, one of the most important landmarks of the city. Moreover, the colors of the name were based on the Dutch flag, to combine it with the overall Dutch identity. 
+Previously we mentioned, the name is a wordplay for Rotterdam, easy to remember, and accurate as it describes the goal of the application. In addition, as Rotterdam is the largest port in Europe and inspired by the fact that water is an integral element of the city, the primary color of the user interface is blue. The splash screen shown in Figure \autoref{fig:splash_screen} is a prime example of the application's design-wise adaptation since it illustrates the Erasmus bridge, one of the most important landmarks of the city. Moreover, the colors of the name were based on the Dutch flag, to combine it with the overall Dutch identity.      
+
+
+The application has two types of users: the administrator and the regular users. Both types need to set up their personal and trip settings and can pick the activities they would like to do. The administrator is considered the person who creates a new trip using the application and is distinguished by a small “crown” icon. An additional feature for the administrator is to invite his friends (regular users) to join the application and propose a starting point or visiting plan for the trip. The regular users are capable of accepting or rejecting the administrator’s proposals.
+
+At first, the administrator is starting a new trip and sets up a profile and the trip settings. As shown in \autoref{fig:profile_trip_settings} (b) \& (c), these involve the name, the cultural background, and if the user has been to Rotterdam before. Information about the user's studies is also required since the application is for students of the University of Utrecht. Identifying the field of studying is necessary for the user representation. Although, the dropdown menu will provide the option of \emph{'I am not a student'} in case the user is not studying. As a last profile setting, the user needs to set an approximate amount of money, willing to spend so that the application does not show results that are exceeding the group's budget. In the trip settings, the time-frame of the day trip is set to show only activities and places that are open during the visit.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/splash_screen.png}
-    \caption{The splash screen of Route2Dam}
-    \label{fig:splash_screen}
-\end{figure}
-
-As mentioned earlier, the application has two types of users; the administrator and the simple users. Both types need to set up their personal and trip settings and can pick the activities they would like to do. 
-
-The administrator is considered the person to first create a new trip on the application, and he is distinguished by a small “crown” icon. His additional feature is that he can invite his friends (regular users) to join the application and propose starting point or full tour for the trip. The regular users are capable of accepting or rejecting the administrator’s proposals.
-
-At first, the administrator is starting a new trip and sets up his profile and trip preferences. As shown in \autoref{fig:profile_trip_settings}, these involve his name, if he is Dutch or no, and if he has been before to Rotterdam. Information about his studies is also required since the application is for students of the University of Utrecht. Identifying the field of studying is necessary for filtering the suggested activities. Although, the dropdown menu will provide the option of \emph{'I am not a student'} in case the user is not studying. As a last profile setting, the user needs to set an approximate amount of money he is willing to spend so that the application does not show results that are over the group's budget. In the trip settings, the time-frame of the day trip is set to show only activities and places that are open during the visit.
-
-\begin{figure}[H]
-    \centering
-    \subfloat[\centering]{{\includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/profile.png} }}%
+    \subfloat[\centering\label{fig:splash_screen}]{\includegraphics[width=0.25\textwidth]{paper/imgs/hifi_prototypes/splash_screen.png}}
     \qquad
-    \subfloat[\centering]{{\includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/trip_settings.png} }}%
+    \subfloat[\centering]{{\includegraphics[width=0.25\textwidth]{paper/imgs/hifi_prototypes/profile.png} }}%
+    \qquad
+    \subfloat[\centering]{{\includegraphics[width=0.25\textwidth]{paper/imgs/hifi_prototypes/trip_settings.png} }}%
     \caption{The profile and trip settings screens }%
     \label{fig:profile_trip_settings}%
 \end{figure}
@@ -438,11 +448,11 @@ Afterwards, the administrator can send an invitation to other users by tapping o
 \end{figure}
 
 
-Apart from the invitation button, this screen is also available for simple users, so both user types share the same user interface. Once the user has set up his personal preferences, the data is stored in the application and accessible to view or edit from the left navigation drawer. For example, his individually suggested activities are available under the “My best picks” item. Next time the user uses the application, he can have a clear overview of his personalized suggestions, and he could use them if he wants to go on a solo trip. Similarly,  in the \emph{History} item, he can find all the places he visited in previous trips, information that the system uses in the background to suggest new places.  Another feature of this screen is that everyone can see who has already joined the account or even uploaded a profile picture.
+Apart from the invitation button, this screen is also available for regular users, so both user types share the same user interface. Once the user has set up the personal preferences, the data is stored in the application and accessible to view or edit from the left navigation drawer. For example, individually suggested activities are available under the \emph{My best picks} item. The next time the application is used, the user can have a clear overview of personalised suggestions. With this, the user can use them to go on a solo trip at another point in time. Similarly, in the \emph{History} item, the user can find all the places from previous trips; information that the system uses in the background to suggest new places. Another feature of this screen is that everyone can see who has already joined the account or even uploaded a profile picture.
 
 After "joining" the trip and setting up their initial settings, every member of the group is prompted with the pairwise comparison screen as in \autoref{fig:pairwise_comparison_screens}.
 
-There, the user gets two different options, and by tapping on one of the images, he moves on to the next pair for a minimum of three times. At last, the system urges the user to either continue the customization and move to another round of pair comparisons or show him some suggested activities.
+There, the user gets two different options, and by tapping on one of the images will move on to the next pair for a minimum of three times. The progress is shown visually with a progress bar. This offers transparency to the user as it shows how much progress  At last, the system motivates the user to either continue the customization and move to another round of pair comparisons or presents some suggested activities.
 
 \begin{figure}[H]
     \centering
@@ -453,7 +463,7 @@ There, the user gets two different options, and by tapping on one of the images,
     \label{fig:pairwise_comparison_screens}%
 \end{figure}
 
-At this point, he can also get additional information about the location before he selects it. This information contains the description of the activity, opening times, and contact details, as shown in \autoref{fig:info_screens}.
+At this point, the user can also get additional information about the location before it is selected. This information contains a description of the activity, opening times, and contact details, as shown in \autoref{fig:info_screens}.
 
 \begin{figure}[H]
     \centering
@@ -466,7 +476,7 @@ At this point, he can also get additional information about the location before 
     \label{fig:info_screens}%
 \end{figure}
 
-Once the user finishes with the customization, he is shown the results screen (\autoref{fig:results_screen}) with suggested activities, that have been recommended by the system based on the individual rankings. At this stage, as an administrator, he can either propose to do all the activities on the list by tapping on “suggest visiting plan” or suggest the starting point to be a specific location. 
+Once the user finishes with the customization, the result screen with suggested activities that have been recommended by the system based on the individual rankings is shown (\autoref{fig:results_screen}). At this stage, the administrator can either propose to do all the activities on the list by tapping on “suggest visiting plan” or suggest the starting point to be a specific location. 
 
 \begin{figure}[H]
     \centering
@@ -475,7 +485,7 @@ Once the user finishes with the customization, he is shown the results screen (\
     \label{fig:results_screen}
 \end{figure}
 
-The other users then receive a push notification with the starting point, and they can accept it or reject it (\autoref{fig:notification_yes_no}). Apart from that, there is a possibility to remove a suggested activity from each user's list by swiping left.
+The other users will then receive a push notification with the starting point. They can accept it or reject it (\autoref{fig:notification_yes_no}). In the case of a rejection, there is a possibility of voting by removing a suggested activity from each user's list with a left swipe.
 
 \begin{figure}[H]
     \centering
@@ -486,13 +496,13 @@ The other users then receive a push notification with the starting point, and th
     \label{fig:notification_yes_no}%
 \end{figure}
 
-Once the starting point is agreed upon, the option is disabled and colored in grey (\autoref{fig:grey_result}), eliminating the danger of the users getting confused. Another feature of this screen is that users can get additional information about activity from the ‘i’ icon or click on the directions icon that will open an external application to navigate them there. One such application may be Google maps. Also, there are small icons in every item on the list, indicating if the place is a landmark, bar, or restaurant. In combination with a must-see icon, the user can get instant information without having to tap twice, reducing the cognitive effort it takes to pick an option.
+Once the starting point is agreed upon, the option is marked as selected with a green 'check' icon (\autoref{fig:result_selected}), eliminating the danger of the users getting confused. Another feature of this screen is that users can get additional information about activity from the ‘i’ icon or click on the directions icon that will open an external application to navigate them there. One such application may be Google maps. Also, there are small icons in every item on the list, indicating if the place is a landmark, bar, or restaurant. Showing the must-see icon together with the place indication provides the user with information, without having to tap twice. As a result, it reduces the cognitive effort it takes to pick an option.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/results_grey.png}
-    \caption{The selected activity is greyed out}
-    \label{fig:grey_result}
+    \includegraphics[width=0.3\textwidth]{paper/imgs/hifi_prototypes/result_selected.png}
+    \caption{The selected activity with the green icon}
+    \label{fig:result_selected}
 \end{figure}
 
 Lastly, as can be seen in figure \ref{fig:must_see}, the application can send push notifications throughout the trip, notifying the users about must-see attractions. For example, the users might be on their way to a selected activity and pass by an important landmark. This notification is supposed to trigger their curiosity and the group might decide to spend a few extra minutes on this must-see location.
@@ -507,35 +517,37 @@ Lastly, as can be seen in figure \ref{fig:must_see}, the application can send pu
 \subsection{Use-case scenarios}
 To better showcase the adaptive nature of the application, we will present two case scenarios.
 
-\textbf{Use case scenario 1:} Sara, a master’s student in Arts \& Society and her group of friends from the AI program are going on a day trip to Rotterdam. She has used the application before and thus, has answered a couple of comparison queries. As the individual suggestions seem to reflect her interest in art, she does not see the need to answer more queries. She creates the trip, invites her friends and waits until everyone has joined the group. She ifxs now presented with a suggested plan as shown in figure \ref{fig:saras_results}.
+\textbf{Use case scenario 1:} Sara, a master’s student in Arts \& Society and her group of friends from the AI program are going on a day trip to Rotterdam. She has used the application before and thus, has answered a couple of comparison queries. As the individual suggestions seem to reflect her interest in art, she does not see the need to answer more queries. She creates the trip, invites her friends and waits until everyone has joined the group. She is now presented with a suggested plan as shown in figure \ref{fig:saras_results}.
 
 \begin{figure}[H]
     \centering
-    \subfloat[\centering]{{\includegraphics[width=0.25\textwidth]{paper/imgs/hifi_prototypes/content_adaptation.png} }}%
+    \subfloat[\centering]{{\includegraphics[width=0.21\textwidth]{paper/imgs/hifi_prototypes/content_adaptation.png} }}%
     \qquad
-    \subfloat[\centering]{{\includegraphics[width=0.25\textwidth]{paper/imgs/hifi_prototypes/beach.png}}}%
-    \caption{Shows the suggestions of Sara and the group suggestions. Sara's suggested activities results based on her interests in art, while the groups suggestion shows a preference for outdoor activities.}%
+    \subfloat[\centering]{{\includegraphics[width=0.21\textwidth]{paper/imgs/hifi_prototypes/beach.png}}}%
+    \caption{Shows the suggestions of Sara (a) and the group suggestions (b). Sara's suggested activities results based on her interests in art, while the groups suggestion shows a preference for outdoor activities.}%
     \label{fig:saras_results}%
 \end{figure}
 
-After discussing the plan with the group and convincing them to visit \emph{Tent}, an art center with temporary exhibitions, she decides to propose it officially. After selecting it, her friends receive the push notification. To her surprise, 2 of her 4 other friends reject the idea. They probably were not courageous enough to openly say that they are not interested in art.  
+After discussing the plan in person with the group and convincing them to visit \emph{Tent}, an art center with temporary exhibitions, she decides to propose it officially. After selecting it, her friends receive the push notification. To her surprise, 2 of her 4 other friends reject the idea. They probably were not courageous enough to openly say that they are not interested in art.  
 
-Now, the group has to vote and decides to start with the trip at \emph{Hoek van Holland}. Maybe because it happens to be an extremely warm day for this time of the year in the Netherlands. As a result of the pick the item is greyed out of the list and everyone knows their first destination of their trip.
-%After agreeing in an offline discussion that they do not want to go there, Sara has to pick a new starting point for their trip. Another activity that she would like to do is going to the beach of Rotterdam. Since it happens to be an extremely warm day for this time of the year in the Netherlands, she picks Hoek van Holland from her suggested list. This time, everyone likes the idea and they decide to go there, even if it takes approximately 40 minutes by means of transport to get there from the central train station. Sara taps on the directions button and the item is selected and greyed out of the list.\\
+Now, the group has to vote and decides to start with the trip at \emph{Hoek van Holland}; maybe because it happens to be an extremely warm day for this time of the year in the Netherlands. As a result of the pick, the green 'check' icon is shown and everyone knows their first destination of their trip.
 
-\textbf{Use case scenario 2:} The group spends a few hours at the beach until the weather starts to change, a common phenomenon for the country.  Within an hour it gets really cold so they decide to go back to the city center and find something else to do, preferably indoors. One of the other group members checks on the options they have on the application. 
+\textbf{Use case scenario 2:} The group spends a few hours at the beach until the weather starts to change, a common phenomenon for the country.  Within an hour it starts to rain so they decide to go back to the city center and find something else to do, preferably indoors. One of the other group members checks on the options they have on the application. 
 \begin{figure}[H]
     \centering
-    \subfloat[\centering]{{\includegraphics[width=0.25\textwidth]{paper/imgs/hifi_prototypes/beach.png} }}%
+    \subfloat[\centering]{{\includegraphics[width=0.21\textwidth]{paper/imgs/hifi_prototypes/beach.png} }}%
     \qquad
-    \subfloat[\centering]{{\includegraphics[width=0.25\textwidth]{paper/imgs/hifi_prototypes/cinema.png} }}%
+    \subfloat[\centering]{{\includegraphics[width=0.21\textwidth]{paper/imgs/hifi_prototypes/cinema.png} }}%
     \caption{Shows how the application adapts to location and weather. (a) shows the initial suggestion and (b) the adapted suggestion.}
     \label{fig:cinema}
 \end{figure}
-The system, based on the new location of the user and the fact that the weather has worsened, added a few additional activities, as can be seen in \autoref{fig:cinema}. All these new places are indoors and next to the tram station after they arrived from the beach.
+Based on the new location of the user and the fact that the weather has worsened, the system added a few additional activities as can be seen in \autoref{fig:cinema}. All these new places are indoors and next to the tram station in the vicinity of the beach.
 
-\section{Discussion}
-This last section will comment on some of the limitations, exclusions and possible improvements of the application. Many parts of the application rely on simplifying assumptions. Most of them were explained and justified. However, some remain latent. One of these latent assumptions relates to changes in group compositions. In this paper we have not addressed cases in which the group administrator or members of the group change. Whether it be before the trip or on-site. A group may decide to split up based on sub-group interests, which would require the application to include group splitting features. Another important issue that was not addressed in this application is explainability and transparency. An explanation for recommendation helps to facilitate trust in the application's recommendation. The pairwise preference model does provide a measure for uncertainty $C^*$ which could be leveraged for explaining the user model. However, this would only account for one component of the application. Other components would still require explanations. Hence, an elaborate explainability module would be required, which we declared out-of-scope for the first iteration of Route2Dam, but remains an important path for improvement. The last part that was not included in the application was user feedback. User behaviour, such as the amount of pictures taken, the time that was spent in a particular location or even direct up- and downvotes, might yield valuable information, that could be incorporated into the model. However, especially for the two initial examples, privacy concerns arise as they would require tracking the user's behaviour without his knowledge. This would have conflicted with the application's design goal to keep the user's privacy and thus, was not considered further. 
+\section{Discussion and Limitations}
+This last section will comment on some of the limitations, exclusions, and possible improvements in the application. Many parts of the application rely on simplifying assumptions. Most of them were explained and justified. However, some remain latent. One of these latent assumptions relates to changes in group compositions. In this paper, we have not addressed cases in which the group administrator or members of the group change. Whether it be before the trip or on-site. A group may decide to split up based on sub-group interests, which would require the application to include group splitting features. The last part that was not included in the application was user feedback. User behavior, such as the number of pictures taken, the time that was spent in a particular location, or even direct up- and downvotes, might yield valuable information, that could be incorporated into the model. However, especially for the two initial examples, privacy concerns arise because they would require extensive monitoring of the user's behavior. This would have conflicted with the application's design goal to keep the user's privacy and thus, was not considered further. Another important issue that was not addressed in this application is explainability and transparency. An explanation for recommendation helps to facilitate trust in the application's recommendation. The pairwise preference model does provide a measure for uncertainty $C^*$ which could be leveraged for explaining the user model. However, this would only account for one component of the application. Other components would still require explanations. Hence, an elaborate explainability module would be required, which we declared out-of-scope for the first iteration of Route2Dam, but remains an important path for improvement.
+
+\section{Conclusion}
+In conclusion, this paper introduces Route2Dam, a group travel recommender system, that not only adapts to individual users of the trip but also to the on-site situation and changes, such as weather, time of day, or location. The system uses a model-based approach out of the preference-elicitation literature, which does not place a large cognitive burden on the user. We achieve this by pairwise querying for item preferences and using them to infer an approximate item ranking for every individual in the group. With social choice methods, such as Borda voting and approval voting, we aggregate each user's individual preference ranking. The UI supports not only the preference elicitation process but also the decision making. That being said, Route2Dam intertwines many different components to find a compromise for the group's optimal Rotterdam experience.
 
 \clearpage 
 \printbibliography
